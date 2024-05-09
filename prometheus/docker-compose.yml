@@ -28,21 +28,23 @@ services:
     container_name: node_exporter
     command:
       - '--path.rootfs=/host'
-    network_mode: host
-    pid: host
     restart: unless-stopped
     volumes:
       - './node-exporter-data:/host:ro,rslave'
 
   cadvisor:
-    image: google/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor
+    container_name: cadvisor
     # ports:
       # - "8080:8080"
     volumes:
-      - ./cadvisor-data:/rootfs:ro
-      - ./cadvisor-data/var/run:/var/run:rw
-      - ./cadvisor-data/sys:/sys:ro
-      - ./cadvisor-data/var/lib/docker/:/var/lib/docker:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+    devices:
+      - dev/kmsg
 
 
 volumes:
